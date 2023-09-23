@@ -25,9 +25,11 @@ if config.config_file_name is not None:
 
 # add your model's MetaData object here
 # for 'autogenerate' support
-from src.ad.models import metadata as metadata_announcement
-target_metadata = [metadata_announcement, ]
-# target_metadata = None
+
+from src.ad.models import metadata as metadata_advertisement
+from src.auth.models import metadata as metadata_auth
+target_metadata = [metadata_auth]
+# target_metadata = [metadata_advertisement]
 
 
 # other values from the config, defined by the needs of env.py,
