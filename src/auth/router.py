@@ -1,14 +1,11 @@
 from fastapi import APIRouter
 
 from src.auth.config import fastapi_users, auth_backend
-from src.auth.schemas import *
+from src.auth.schemas import UserRead, UserCreate
 
 from src.config import API_URL
 
-router = APIRouter(
-    prefix=f'/{API_URL}/auth',
-    tags=["Auth"],
-)
+router = APIRouter()
 
 router.include_router(
     fastapi_users.get_auth_router(auth_backend),
@@ -21,3 +18,4 @@ router.include_router(
     prefix=f"/{API_URL}/auth",
     tags=["Auth"],
 )
+

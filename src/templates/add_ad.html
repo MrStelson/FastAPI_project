@@ -1,0 +1,63 @@
+{% extends 'layout.html '%}
+
+{% block title %}Add new Advertisement{% endblock %}
+
+{% block usersetting %}
+
+    {% if user.role_id == 3 %}
+        <a href="/editUsers">Редактировать пользователей</a>
+    {% endif %}
+
+    {% if user is none %}
+        <a href="/login">Вход и регистрация</a>
+    {% else %}
+        <a href="/add">Добавить объявление</a>
+        <a href="/user/{{ user.id }}" class="username">{{ user.username }}</a>
+        <a href="/logout">Выйти</a>
+    {% endif %}
+
+{% endblock %}
+
+{% block category %}
+    {% for type in types %}
+        <a href="/type/{{ type.id }}">
+            <li>{{ type.type_name }}</li>
+        </a>
+    {% endfor %}
+{% endblock %}
+
+{% block content %}
+<div class="container-add">
+
+    {% if user is none %}
+        <h1>Please login</h1>
+    {% else %}
+    <form class='form-add' method="POST">
+
+        <input style='height: 30px' type="text" class="form-control" name="title" id="title" placeholder="Input name of Advertisement"><br>
+
+        <div class='list-block'>
+            <select style='height: 30px' class="form-control types" name="type_name" id="type_name" >
+                {% for type in types %}
+                    <option>{{ type.type_name }}</option>
+                {% endfor %}
+            </select>
+
+            <select style='height: 30px' class="form-control cats" name="category_name" id="category_name" >
+                {% for cat in cats %}
+                    <option>{{ cat.category_name }}</option>
+                {% endfor %}
+            </select><br>
+        </div>
+
+        <input style='height: 30px' type="text" class="form-control" name="price" id="price" placeholder="Input price of Advertisement"><br>
+
+        <textarea style='height: 150px' class="form-control" name="description" id="description" placeholder="Input description of Advertisement"></textarea><br>
+
+        <input type="submit" class="btn-added" value="Добавить">
+    </form>
+    {% endif %}
+
+
+</div>
+{% endblock %}

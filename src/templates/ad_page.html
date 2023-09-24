@@ -1,0 +1,88 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+Advertisement
+{% endblock %}
+
+{% block type_name %}
+{% if type_name %}
+<h1>{{ type_name }}</h1>
+{% else %}
+<h1>Все категории</h1>
+{% endif %}
+{% endblock %}
+
+{% block usersetting %}
+
+{% if user.role_id == 3 %}
+<a href="/editUsers">Редактировать пользователей</a>
+{% endif %}
+
+{% if user is none %}
+<a href="/login">Вход и регистрация</a>
+{% else %}
+<a href="/add">Добавить объявление</a>
+<a href="/user/{{ user.id }}" class="username">{{ user.username }}</a>
+<a href="/logout">Выйти</a>
+{% endif %}
+
+{% endblock %}
+
+{% block category %}
+{% for type in types %}
+<a href="/type/{{ type.id }}">
+    <li>{{ type.type_name }}</li>
+</a>
+{% endfor %}
+{% endblock %}
+
+{% block content %}
+<div class="adContainer">
+    <div class="ad_name">
+        Название:
+        {{ ad.name }}
+    </div>
+    <div class="ad_price">
+        Цена:
+        {{ ad.price }}
+    </div>
+    <div class="ad_category">
+        Категория:
+        {{ category.category_name }}
+    </div>
+    <div class="ad_type">
+        Тип:
+        {{ type.type_name }}
+    </div>
+    <div class="description">
+        Описание:
+        {{ ad.description }}
+    </div>
+
+    <div class="created">
+        Создано:
+        {{ ad.created_at }}
+    </div>
+
+
+    {% if user is not none %}
+    <div class="item-btn">
+        <a href="/ad/{{ ad.id }}" role="button">Оставить комментарий</a>
+    </div>
+    {% endif %}
+    <div class="comments">
+        Комментарии:
+        {% for comment in comments %}
+        <div class="comment">
+            {{ comment }}
+        </div>
+
+        {% if user.role_id == 3 %}
+        <a href="/comment/delete/{{ comment.id }}">Удалить</a>
+        {% endif %}
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}
+

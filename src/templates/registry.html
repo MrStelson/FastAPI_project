@@ -1,0 +1,42 @@
+{% extends 'layout.html' %}
+
+<head>
+    <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/css/line.css">
+    <link rel="stylesheet" href="{{ url_for('static', path='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', path='css/style_login.css') }}">
+</head>
+
+{% block title %}Registry{% endblock %}
+
+{% block content %}
+<div class="loginContainer">
+    <div class="form-login-registry">
+        <div class="title-form">
+            <h1 class="title" id="titleLoginText">Sign up</h1>
+        </div>
+        {% for error in errors %}
+            {{ error }}
+        {% endfor %}
+        <form method="POST">
+            <div class="input-field">
+                 <input type="email" name="email" placeholder="Enter your Email" required>
+            </div>
+            <div class="input-field">
+                <input type="username" name="username" placeholder="Enter your username" required>
+            </div>
+            <div class="input-field">
+                <input type="password" name="password" placeholder="Enter your password" required>
+            </div>
+
+            <div class="input-field button">
+                <input type="submit" value="Registry Now" id="registryButton">
+            </div>
+        </form>
+
+        <div class="login-signup">
+            <span class="text" id="notMemberText">Have an account?</span>
+            <a href="/login" class="text signup-link" id="notMemberHref">Login now</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

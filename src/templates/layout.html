@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <link rel="stylesheet" href="{{ url_for('static', path='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', path='css/style_login.css') }}">
+    <title>{% block title %}{% endblock %}</title>
+</head>
+<body>
+
+    <div class="headContainer">
+        <div class="headContainerInfo">
+            <div class="infoListBtn">
+                <svg id="infoListBtn" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-list" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"/></svg>
+                <a href="/"><span>Advertisement Service</span></a>
+            </div>
+
+            <div class="typeContainer">
+                {% block type_name %}
+                {% endblock %}
+            </div>
+
+            <div class="infoList displayDeactivated" id='infoList'>
+                <ul>
+                    {% block category %}
+                    {% endblock %}
+                </ul>
+            </div>
+        </div>
+
+        <div class="accountContainerInfo">
+            <div class="accountSettings">
+                {% block usersetting %}
+                {% endblock %}
+            </div>
+        </div>
+    </div>
+
+    <div class="blockContentContainer">
+        <div class="blockContent">
+            {% block content %}
+            {% endblock %}
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', path='js/activateListInfo.js') }}"></script>
+</body>
+</html>

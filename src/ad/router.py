@@ -18,19 +18,38 @@ router = APIRouter(
 
 @router.get('/type')
 async def get_type(session: AsyncSession = Depends(get_async_session)):
-    # try:
-    result = await get_all_types(session=session)
-    return {
-        "status": 200,
-        "data": result,
-        "detail": None,
-    }
-    # except Exception:
-    #     return {
-    #         "status": 500,
-    #         "data": f"Internal Server Error",
-    #         "detail": None,
-    #     }
+    try:
+        result = await get_all_types(session=session)
+        return {
+            "status": 200,
+            "data": result,
+            "detail": None,
+        }
+    except Exception:
+        return {
+            "status": 500,
+            "data": f"Internal Server Error",
+            "detail": None,
+        }
+
+
+@router.get('/type/{type_id}')
+async def get_type_id(type_id: int,
+                      session: AsyncSession = Depends(get_async_session)
+                      ):
+    try:
+        result = await get_type_by_id(type_id=type_id, session=session)
+        return {
+            "status": 200,
+            "data": result,
+            "detail": None,
+        }
+    except Exception:
+        return {
+            "status": 500,
+            "data": f"Internal Server Error",
+            "detail": None,
+        }
 
 
 @router.post('/type')
@@ -38,6 +57,12 @@ async def add_type(new_type_name: str,
                    session: AsyncSession = Depends(get_async_session),
                    user: User = Depends(current_user),
                    ):
+    if user is None:
+        return {
+            "status": 401,
+            "data": None,
+            "detail": "Don't have access. Please authorisation"
+        }
     if user.role_id in [2, 3]:
         try:
             await add_type_ad(new_type_name, session)
@@ -79,12 +104,19 @@ async def get_category(session: AsyncSession = Depends(get_async_session)):
 
 @router.post('/category')
 async def add_category(new_category_name: str,
+                       type_id: int,
                        session: AsyncSession = Depends(get_async_session),
                        user: User = Depends(current_user),
                        ):
+    if user is None:
+        return {
+            "status": 401,
+            "data": None,
+            "detail": "Don't have access. Please authorisation"
+        }
     if user.role_id in [2, 3]:
         try:
-            await add_category_ad(new_category_name, session)
+            await add_category_ad(new_category_name, type_id, session)
             return {
                 "status": 200,
                 "data": f"Category {new_category_name} added",
@@ -140,12 +172,12 @@ async def get_ad_by_id(ad_id: int,
         }
 
 
-@router.get('/type/{type_name}')
-async def get_ad_by_type(type_name: str,
+@router.get('/type/{type_id}')
+async def get_ad_by_type(type_id: int,
                          session: AsyncSession = Depends(get_async_session),
                          ):
     try:
-        result = await get_by_type(type_name=type_name, session=session)
+        result = await get_by_type(type_id=type_id, session=session)
         return {
             "status": 200,
             "data": result,
@@ -178,14 +210,45 @@ async def get_ad_by_category(category_name: str,
         }
 
 
+@router.get('/user/{user_id}')
+async def get_ad_by_id_user(user_id: int,
+                            session: AsyncSession = Depends(get_async_session),
+                            ):
+    try:
+        result = await get_by_user_id(user_id=user_id, session=session)
+        return {
+            "status": 200,
+            "data": result,
+            "detail": None,
+        }
+    except Exception:
+        return {
+            "status": 500,
+            "data": f"Internal Server Error",
+            "detail": None,
+        }
+
+
 @router.post('/')
 async def add_ad(new_ad: AdCreate,
                  session: AsyncSession = Depends(get_async_session),
                  user: User = Depends(current_user),
                  ):
+    if user is None:
+        return {
+            "status": 401,
+            "data": None,
+            "detail": "Don't have access. Please authorisation"
+        }
+    if user.is_banned:
+        return {
+            "status": 401,
+            "data": None,
+            "detail": "Your banned"
+        }
     try:
         new_ad.user_id = user.id
-        await add_new_ad(new_ad, session=session)
+        await add_new_ad(new_ad)
         return {
             "status": 200,
             "data": f'Advertisement {new_ad.name} added',
@@ -204,6 +267,12 @@ async def delete_ad(ad_id: int,
                     session: AsyncSession = Depends(get_async_session),
                     user: User = Depends(current_user),
                     ):
+    if user is None:
+        return {
+            "status": 401,
+            "data": None,
+            "detail": "Don't have access. Please authorisation"
+        }
     try:
         await delete_ad_db(ad_id=ad_id, user_id=user.id, session=session)
         return {
@@ -250,6 +319,12 @@ async def add_ad_comments(ad_id: int,
                           session: AsyncSession = Depends(get_async_session),
                           user: User = Depends(current_user),
                           ):
+    if user is None:
+        return {
+            "status": 401,
+            "data": None,
+            "detail": "Don't have access. Please authorisation"
+        }
     try:
         new_comment = AdComments(
             ad_id=ad_id,
@@ -270,10 +345,16 @@ async def add_ad_comments(ad_id: int,
         }
 
 
-@router.delete('/{ad_id}/comments/{comment_id}/delete')
+@router.delete('/{ad_id}/comments/delete/{comment_id}')
 async def delete_ad_comment(comment_id: int,
                             session: AsyncSession = Depends(get_async_session),
-                            user: User = Depends(current_user),):
+                            user: User = Depends(current_user), ):
+    if user is None:
+        return {
+            "status": 401,
+            "data": None,
+            "detail": "Don't have access. Please authorisation"
+        }
     if user.role_id in [2, 3]:
         await delete_comment(comment_id=comment_id, session=session)
         return {

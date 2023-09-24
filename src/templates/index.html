@@ -1,0 +1,69 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+Advertisement
+{% endblock %}
+
+{% block type_name %}
+{% if type_name %}
+    <h1>{{ type_name }}</h1>
+{% else %}
+    <h1>Все категории</h1>
+{% endif %}
+{% endblock %}
+
+{% block usersetting %}
+
+    {% if user.role_id == 3 %}
+        <a href="/editUsers">Редактировать пользователей</a>
+    {% endif %}
+
+    {% if user is none %}
+        <a href="/login">Вход и регистрация</a>
+    {% else %}
+        <a href="/add">Добавить объявление</a>
+        <a href="/user/{{ user.id }}" class="username">{{ user.username }}</a>
+        <a href="/logout">Выйти</a>
+    {% endif %}
+
+{% endblock %}
+
+{% block category %}
+    {% for type in types %}
+        <a href="/type/{{ type.id }}">
+            <li>{{ type.type_name }}</li>
+        </a>
+    {% endfor %}
+{% endblock %}
+
+{% block content %}
+    {% for ad in ads %}
+
+        <div class="col">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="">Name: {{ ad.name }}</h4>
+                </div>
+                <div class="card-body">
+                    <ul class="card-list">
+                        <li>Description: {{ ad.description }}</li>
+                        <li>Price: {{ ad.price }}</li>
+                        <li>Created_at: {{ ad.created_at }}</li>
+                    </ul>
+                    <div class="btn-container">
+                        {% if user.id == ad.user_id or user.role_id == 3%}
+                        <div class="item-btn delete">
+                            <a href="/ad/delete/{{ ad.id }}">Delete</a>
+                        </div>
+                        {% endif %}
+                        <div class="item-btn">
+                            <a href="/ad/{{ ad.id }}" role="button">View details »</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    {% endfor %}
+{% endblock %}
+
