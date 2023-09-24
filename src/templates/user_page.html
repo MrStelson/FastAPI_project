@@ -46,8 +46,6 @@ Advertisement
                 </div>
                 <div class="card-body">
                     <ul class="card-list">
-                        <li>Type {{ ad.category_id }}</li>
-                        <li>Category {{ ad.category_id }}</li>
                         <li>Description: {{ ad.description }}</li>
                         <li>Price: {{ ad.price }}</li>
                         <li>Created_at: {{ ad.created_at }}</li>
@@ -55,7 +53,7 @@ Advertisement
                     <div class="btn-container">
                         {% if user.id == ad.user_id or user.role_id == 3%}
                         <div class="item-btn delete">
-                            <a href="/ad/delete{{ ad.id }}" role="button">Delete</a>
+                            <a href="/ad/delete/{{ ad.id }}">Delete</a>
                         </div>
                         {% endif %}
                         <div class="item-btn">
