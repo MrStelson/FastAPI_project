@@ -58,9 +58,14 @@ class Ad(Base):
         back_populates='ad',
     )
 
+    complaints = relationship(
+        'AdComplaint',
+        back_populates='ad',
+    )
+
 
 class AdComment(Base):
-    __tablename__ = "ad_comments"
+    __tablename__ = "ad_comment"
     id = Column(Integer, primary_key=True, autoincrement=True)
     value = Column(String, nullable=False)
     created_at = Column(TIMESTAMP(timezone=True), default=datetime.utcnow)
@@ -70,4 +75,19 @@ class AdComment(Base):
     ad = relationship(
         'Ad',
         back_populates='comments',
+    )
+
+
+class AdComplaint(Base):
+    __tablename__ = "ad_complaint"
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    value = Column(String, nullable=False)
+    created_at = Column(TIMESTAMP(timezone=True), default=datetime.utcnow)
+    user_id = Column(Integer)
+
+    ad_id = Column(Integer, ForeignKey('ad.id'))
+    ad = relationship(
+        'Ad',
+        back_populates='complaints',
     )

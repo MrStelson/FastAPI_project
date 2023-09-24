@@ -1,12 +1,19 @@
 from sqlalchemy import insert, select, delete
-from src.ad.models import Ad, AdType, AdCategory, AdComment
+from src.ad.models import Ad, AdType, AdCategory, AdComment, AdComplaint
 from src.database import async_session_maker
+from fastapi_pagination.ext.sqlalchemy import paginate
 
 
-async def get_result_list(query, session):
+async def get_result_list(query,
+                          session,
+                          page: int = 0,
+                          size: int = 5,
+                          ):
+    offset_min = page * size
+    offset_max = (page + 1) * size
     result = await session.execute(query)
     result_list = []
-    res = result.all()
+    res = result.all()[offset_min:offset_max]
     for value in res:
         row = value[0].__dict__
         row.pop('_sa_instance_state')
@@ -60,9 +67,12 @@ async def add_category_ad(new_category_name, type_id, session):
     await session.commit()
 
 
-async def get_all_ad(session):
+async def get_all_ad(session,
+                     page: int,
+                     size: int,
+                     ):
     query = select(Ad).join(AdCategory).join(AdType).order_by(Ad.id)
-    result_list = await get_result_list(query=query, session=session)
+    result_list = await get_result_list(query=query, session=session, page=page, size=size)
     return result_list
 
 
@@ -87,9 +97,13 @@ async def get_by_category(category_name, session):
     return result_list
 
 
-async def get_by_type(type_id, session):
+async def get_by_type(type_id,
+                      session,
+                      page: int,
+                      size: int,
+                      ):
     query = select(Ad).join(AdCategory).join(AdType).where(AdType.id == type_id)
-    result_list = await get_result_list(query=query, session=session)
+    result_list = await get_result_list(query=query, session=session, page=page, size=size)
     return result_list
 
 
@@ -137,3 +151,15 @@ async def add_comment(new_comment, session):
 async def delete_comment(comment_id, session):
     stmt = delete(AdComment).where(AdComment.id == comment_id)
     await session.execute(stmt)
+
+
+async def get_complaint(ad_id, session):
+    query = select(AdComplaint).join(Ad).where(AdComplaint.ad_id == ad_id).order_by(AdComplaint.id)
+    result_list = await get_result_list(query=query, session=session)
+    return result_list
+
+
+async def add_complaint(new_complaint, session):
+    stmt = insert(AdComment).values(**new_complaint.dict())
+    await session.execute(stmt)
+    await session.commit()

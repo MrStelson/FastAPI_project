@@ -74,11 +74,13 @@ Advertisement
         Комментарии:
         {% for comment in comments %}
         <div class="comment">
-            {{ comment }}
+            {{ comment.value }}
         </div>
 
         {% if user.role_id == 3 %}
-        <a href="/comment/delete/{{ comment.id }}">Удалить</a>
+        <div class="item-btn">
+            <a href="/comment/delete/{{ comment.id }}">Удалить</a>
+        </div>
         {% endif %}
         {% endfor %}
     </div>

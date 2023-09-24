@@ -15,15 +15,16 @@
 
 ### API service for advertisement service
 
-* ##### Get all advertisements (ads) types (GET): http://localhost/api/v1/ad/type/
-* ##### Get type by id (GET) params={type_id}: http://localhost/api/v1/ad/type/{type_id}/
-* ##### Add type (POST) **only for admin** params={type_name}: http://localhost/api/v1/ad/{type_name}/
-* ##### Get all ads categories (GET): http://localhost/api/v1/ad/category/
-* ##### Add category (POST) **only for admin** params={cat_name}: http://localhost/api/v1/ad/{cat_name}/
-* ##### Get all ads (GET): http://localhost/api/v1/ad/
-* ##### Get ad by id (GET) params={ad_id}: http://localhost/api/v1/ad/{ad_id}/
-* ##### Get ads by category (GET) params={category_name}: http://localhost/api/v1/ad/{category_name}/
-* ##### Add ad (POST) **only for auth user**: http://localhost/api/v1/ad/. Response body:
+* ##### Get all advertisements (ads) types (GET): http://localhost:8000/api/v1/ad/type/
+* ##### Get type by id (GET) params={type_id}: http://localhost:8000/api/v1/ad/types/{type_id}/
+* ##### Add type (POST) **only for admin** params={type_name}: http://localhost:8000/api/v1/ad/{type_name}/
+* ##### Get all ads categories (GET): http://localhost:8000/api/v1/ad/category/
+* ##### Add category (POST) **only for admin** params={cat_name}: http://localhost:8000/api/v1/ad/{cat_name}/
+* ##### Get all ads with pagination (GET) params={page=0, size=5}: http://localhost:8000/api/v1/ad/?page={page}&size={size}
+* ##### Get ad by id (GET) params={ad_id}: http://localhost:8000/api/v1/ad/{ad_id}/
+* ##### Get ads by type with pagination (GET) params={type_id, page=0, size=5}: http://localhost:8000/api/v1/ad/type/{type_id}/?page={page}&size={size}
+* ##### Get ads by category name (GET) params={category_name}: http://localhost:8000/api/v1/ad/{category_name}/
+* ##### Add ad (POST) **only for auth user**: http://localhost:8000/api/v1/ad/. Response body:
 ```
 {
   "name": "string",
@@ -35,10 +36,10 @@
   "user_id": 0
 }
 ```
-* #### Delete ad (DELETE) **only for owner and admin** params={ad_id}:  http://localhost/api/v1/ad/delete/{ad_id}/
-* #### Get all comments (GET) params={ad_id}:  http://localhost/api/v1/ad/{ad_id}/comments/
-* #### Add comment (POST) **only for auth user** params={ad_id}:  http://localhost/api/v1/ad/{ad_id}/comments/
-* #### Delete comment (DELETE) **only admin** params=[{ad_id}, {comment_id}]:  http://localhost/api/v1/ad/{ad_id}/comments/delete/{comment_id}/
+* #### Delete ad (DELETE) **only for owner and admin** params={ad_id}:  http://localhost:8000/api/v1/ad/delete/{ad_id}/
+* #### Get all comments (GET) params={ad_id}:  http://localhost:8000/api/v1/ad/{ad_id}/comments/
+* #### Add comment (POST) **only for auth user** params={ad_id}:  http://localhost:8000/api/v1/ad/{ad_id}/comments/
+* #### Delete comment (DELETE) **only admin** params=[{ad_id}, {comment_id}]:  http://localhost:8000/api/v1/ad/{ad_id}/comments/delete/{comment_id}/
 
 ---
 
@@ -46,7 +47,7 @@
 
 ### Login with JWT
 
-* #### For Sign up (POST): http://localhost/api/v1/auth/register/. Response body:
+* #### For Sign up (POST): http://localhost:8000/api/v1/auth/register/. Response body:
 ```
 {
   "email": "email@email.com",
@@ -60,17 +61,22 @@
 }
 ```
 
-* #### For Login (POST): http://localhost/api/v1/auth/jwt/login/. Response body:
+* #### For Login (POST): http://localhost:8000/api/v1/auth/jwt/login/. Response body:
 ```
 {
   "username": "email@email.com",
   "password": "password",
 }
 ```
-* #### For logout (POST): http://localhost/api/v1/auth/jwt/logout/
+* #### For logout (POST): http://localhost:8000/api/v1/auth/jwt/logout/
 ---
 
 ## * Also You can see in swagger UI (/docs)
+
+---
+---
+
+## Frontend: http://localhost:8000/
 
 ---
 ### Start project

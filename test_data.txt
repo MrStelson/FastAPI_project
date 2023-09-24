@@ -1,0 +1,23 @@
+insert into app_role (id, name)
+values (1, 'user'), (2, 'moderator'), (3, 'admin');
+
+insert into app_user (email, username, role_id, hashed_password, is_active, is_superuser, is_verified, is_banned)
+values ('admin@mail.com', 'Admin', '3', '$2b$12$hRobDSXAV/ssXOvLXu5I9eceU8or1cp.n4/mIma7DnUAf1aj8WRrS', True, False, False, False);
+
+insert into app_user (email, username, role_id, hashed_password, is_active, is_superuser, is_verified, is_banned)
+values ('moderator@mail.com', 'moderator', '2', '$2b$12$92Tv/rVdx5W.LuTlQWOW9eCwEpUpWP.pDsrBjlWd7GoFsnzethS.K', True, False, False, False);
+
+insert into app_user (email, username, role_id, hashed_password, is_active, is_superuser, is_verified, is_banned)
+values ('test_1@mail.com', 'User_1', '1', '$2b$12$hf/BDEBRCBgPvdALs9wbXeUgpngrSrOoTWtymv9ss8bICz62gyH5.', True, False, False, False),
+('test_2@mail.com', 'User_2', '1', '$2b$12$8x81xr68rtOZCYI9Jx9L/.huneEN79OJFtglEjhhORmeRD.Ctl.V6', True, False, False, False),
+('test_3@mail.com', 'User_3', '1', '$2b$12$fRnn2.XyoX5GF3nsnk3aPO3bhuriU8I1TGc9dq.ZcjhmY.gr7P5uy', True, False, False, False);
+
+
+insert into ad_type (id, type_name)
+values (1, 'Работа'), (2, 'Услуги'), (3, 'Одежда'), (4, 'Красота'), (5, 'Запчасти');
+
+insert into ad_category (id, category_name, type_id)
+values (1, 'Ищу работу', 1), (2, 'Ищу сотрудника', 1), (3, 'Транспорт и перевозки', 2), (4, 'Ремнот и отделка', 2), (5, 'Строительство', 2), (6, 'Обучение и курсы', 2), (7, 'Для мужчин', 3), (8, 'Для женщин', 3), (9, 'Для детей', 3), (10, 'Маникюр, педикюр', 4), (11, 'Услуги парикмахера', 4), (12, 'Ресницы, брови', 4), (13, 'Шины, диски', 5), (14, 'Тормозная система', 5), (15, 'Трансмиссия', 5);
+
+insert into ad (id, name, description, price, user_id, category_id)
+values (1, 'Вакансия: Python Developer', 'Мощное описание', '200', 1, 1), (2, 'Вакансия: Go Developer', 'Мощное описание', '200', 3, 1), (3, 'Вакансия: Go Developer', 'Мощное описание', '200', 3, 1), (4, 'Вакансия: Go Developer', 'Мощное описание', '200', 3, 1), (5, 'Вакансия: Go Developer', 'Мощное описание', '200', 3, 1), (6, 'Вакансия: Go Developer', 'Мощное описание', '200', 3, 1), (7, 'Вакансия: Go Developer', 'Мощное описание', '200', 3, 1), (8, 'Вакансия: Go Developer', 'Мощное описание', '200', 3, 1);

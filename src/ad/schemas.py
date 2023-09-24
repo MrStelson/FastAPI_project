@@ -29,3 +29,10 @@ class AdComments(BaseModel):
     ad_id: int
     user_id: int
     created_at: datetime = datetime.utcnow()
+
+
+class AdComplaint(BaseModel):
+    value: str
+    ad_id: int
+    user_id: int
+    created_at: datetime = datetime.utcnow()
