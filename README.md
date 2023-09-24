@@ -27,7 +27,7 @@ alembic revision --autogenerate -m "Name of migration"
 alembic upgrade head
 ```
 ```
-uviron src.main:app --reload for debug
+uvicorn src.main:app --reload
 ```
 #### localhost port: 8000
 ---
