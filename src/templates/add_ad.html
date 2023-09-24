@@ -31,6 +31,8 @@
 
     {% if user is none %}
         <h1>Please login</h1>
+    {% elif user.is_banned %}
+        <h1>You are banned</h1>
     {% else %}
     <form class='form-add' method="POST">
 
