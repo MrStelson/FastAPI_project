@@ -29,6 +29,7 @@ alembic upgrade head
 ```
 uviron src.main:app --reload for debug
 ```
+#### localhost port: 8000
 ---
 ### Start project with docker
 ```
