@@ -18,7 +18,7 @@ python -m venv venv
 venv\Scripts\activate
 ```
 ```
-pip install -r requrements.txt
+pip install -r requirements.txt
 ```
 ```
 alembic revision --autogenerate -m "Name of migration"
