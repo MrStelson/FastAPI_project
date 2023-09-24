@@ -1,0 +1,79 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+Advertisement
+{% endblock %}
+
+{% block type_name %}
+{% if type_name %}
+    <h1>{{ type_name }}</h1>
+{% else %}
+    <h1>Все категории</h1>
+{% endif %}
+{% endblock %}
+
+{% block usersetting %}
+
+    {% if user.role_id == 3 %}
+        <a href="/editUsers">Редактировать пользователей</a>
+    {% endif %}
+
+    {% if user is none %}
+        <a href="/login">Вход и регистрация</a>
+    {% else %}
+        <a href="/add">Добавить объявление</a>
+        <a href="/user/{{ user.id }}" class="username">{{ user.username }}</a>
+        <a href="/logout">Выйти</a>
+    {% endif %}
+
+{% endblock %}
+
+{% block category %}
+    {% for type in types %}
+        <a href="/type/{{ type.id }}">
+            <li>{{ type.type_name }}</li>
+        </a>
+    {% endfor %}
+{% endblock %}
+
+{% block content %}
+    <div class="tableContainer">
+        <table class="users">
+            <tr>
+                <th>Email</th>
+                <th>Username</th>
+                <th>Registered</th>
+                <th>Role</th>
+                <th>Banned</th>
+                <th>Add Admin rules</th>
+            </tr>
+
+            {% for user in users %}
+                <tr>
+                    <td>{{ user.email }}</td>
+                    <td class="admin_btn">
+                        <a href="/user/{{ user.id }}" class="item-btn admin">{{ user.username }}</a>
+                    </td>
+                    <td>{{ user.registred_at }}</td>
+                    <td>
+                        {% if user.role_id == 1 %}
+                        User
+                        {% elif user.role_id == 2 %}
+                        Moderator
+                        {% else %}
+                        Admin
+                        {% endif %}
+                    </td>
+                    <td class="banned_btn">
+                        <a href="/editUsers/banned/{{ user.id }}" class="item-btn delete-admin">{{ user.is_banned }}</a>
+                    </td>
+                    <td class="admin_btn">
+                        <a href="/editUsers/admin/{{ user.id }}" class="item-btn admin">Yes</a>
+                    </td>
+                </tr>
+            {% endfor %}
+
+        </table>
+    </div>
+{% endblock %}
+

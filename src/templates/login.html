@@ -1,0 +1,30 @@
+{% extends 'layout.html' %}
+{% block title %}Login{% endblock %}
+
+{% block content %}
+<div class="loginContainer">
+    <div class="form-login-registry">
+        <div class="title-form">
+            <h1 class="title" id="titleLoginText">Login</h1>
+        </div>
+
+        <form method="POST">
+            <div class="input-field">
+                 <input type="email" name="email" placeholder="Enter your Email" required value="{{ email_reg }}">
+            </div>
+            <div class="input-field">
+                <input type="password" name="password" placeholder="Enter your password" required value="{{ password_reg }}">
+            </div>
+
+            <div class="input-field button">
+                <input type="submit" value="Login Now" id="loginButton">
+            </div>
+        </form>
+
+        <div class="login-signup">
+            <span class="text" id="notMemberText">Not a member?</span>
+            <a href="/registry" class="text signup-link" id="notMemberHref">Signup now</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -13,18 +13,22 @@ class AdType(Base):
     __tablename__ = "ad_type"
     id = Column(Integer, primary_key=True, autoincrement=True)
     type_name = Column(String, nullable=False, unique=True)
-    ads = relationship(
-        'Ad',
-        back_populates='ad_type',
-        cascade='all, delete-orphan',
-        passive_deletes=True
+    categories = relationship(
+        'AdCategory',
+        back_populates='type_name'
     )
 
 
 class AdCategory(Base):
     __tablename__ = "ad_category"
     id = Column(Integer, primary_key=True, autoincrement=True)
-    name = Column(String, nullable=False, unique=True)
+    category_name = Column(String, nullable=False, unique=True)
+    type_id = Column(Integer, ForeignKey('ad_type.id'))
+    type_name = relationship(
+        'AdType',
+        back_populates='categories',
+    )
+
     ads = relationship(
         'Ad',
         back_populates='ad_category',
@@ -42,12 +46,6 @@ class Ad(Base):
     user_id = Column(Integer)
     created_at = Column(TIMESTAMP(timezone=True), default=datetime.utcnow)
     updated_at = Column(TIMESTAMP(timezone=True), default=datetime.utcnow)
-
-    type_id = Column(Integer, ForeignKey('ad_type.id'))
-    ad_type = relationship(
-        'AdType',
-        back_populates='ads',
-    )
 
     category_id = Column(Integer, ForeignKey('ad_category.id'))
     ad_category = relationship(
