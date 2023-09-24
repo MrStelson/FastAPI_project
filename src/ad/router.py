@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from src.ad.schemas import AdCreate, AdComments
+from src.ad.schemas import AdCreate, AdComments, AdComplaint
 from src.ad.service import *
 
 from src.config import API_URL
@@ -33,7 +33,7 @@ async def get_type(session: AsyncSession = Depends(get_async_session)):
         }
 
 
-@router.get('/type/{type_id}')
+@router.get('/types/{type_id}')
 async def get_type_id(type_id: int,
                       session: AsyncSession = Depends(get_async_session)
                       ):
@@ -137,9 +137,12 @@ async def add_category(new_category_name: str,
 
 
 @router.get('/')
-async def get_ad(session: AsyncSession = Depends(get_async_session)):
+async def get_ad(session: AsyncSession = Depends(get_async_session),
+                 page: int = 0,
+                 size: int = 5,
+                 ):
     try:
-        result = await get_all_ad(session=session)
+        result = await get_all_ad(session=session, page=page, size=size)
         return {
             "status": 200,
             "data": result,
@@ -175,9 +178,11 @@ async def get_ad_by_id(ad_id: int,
 @router.get('/type/{type_id}')
 async def get_ad_by_type(type_id: int,
                          session: AsyncSession = Depends(get_async_session),
+                         page: int = 0,
+                         size: int = 5,
                          ):
     try:
-        result = await get_by_type(type_id=type_id, session=session)
+        result = await get_by_type(type_id=type_id, session=session, page=page, size=size)
         return {
             "status": 200,
             "data": result,
@@ -356,9 +361,82 @@ async def delete_ad_comment(comment_id: int,
             "detail": "Don't have access. Please authorisation"
         }
     if user.role_id in [2, 3]:
-        await delete_comment(comment_id=comment_id, session=session)
+        try:
+            await delete_comment(comment_id=comment_id, session=session)
+            return {
+                "status": 200,
+                "data": f'Comment deleted',
+                "detail": None,
+            }
+        except Exception:
+            return {
+                "status": 500,
+                "data": f"Internal Server Error",
+                "detail": None,
+            }
+
+
+@router.post('/{ad_id}/complaint')
+async def add_ad_complaint(ad_id: int,
+                           value: str,
+                           session: AsyncSession = Depends(get_async_session),
+                           user: User = Depends(current_user),
+                           ):
+    if user is None:
+        return {
+            "status": 401,
+            "data": None,
+            "detail": "Don't have access. Please authorisation"
+        }
+    try:
+        new_complaint = AdComplaint(
+            ad_id=ad_id,
+            value=value,
+            user_id=user.id
+        )
+        await add_complaint(new_complaint, session=session)
         return {
             "status": 200,
-            "data": f'Comment deleted',
+            "data": f'Comment added',
             "detail": None,
         }
+    except Exception:
+        return {
+            "status": 500,
+            "data": f"Internal Server Error",
+            "detail": None,
+        }
+
+
+@router.get('/{ad_id}/complaint')
+async def get_ad_complaint(ad_id: int,
+                           session: AsyncSession = Depends(get_async_session),
+                           user: User = Depends(current_user),
+                           ):
+    if user is None:
+        return {
+            "status": 401,
+            "data": None,
+            "detail": "Don't have access. Please authorisation"
+        }
+    if user.role_id in [2, 3]:
+        try:
+            result = await get_complaint(ad_id=ad_id, session=session)
+            return {
+                "status": 200,
+                "data": result,
+                "detail": None,
+            }
+        except Exception:
+            return {
+                "status": 500,
+                "data": f"Internal Server Error",
+                "detail": None,
+            }
+    return {
+        "status": 401,
+        "data": None,
+        "detail": "Don't have access"
+    }
+
+
