@@ -24,6 +24,14 @@ class AdCreate(BaseModel):
     user_id: int
 
 
+class AdUpdate(BaseModel):
+    name: str
+    category_id: int
+    description: str
+    price: str
+    updated_at: datetime = datetime.utcnow()
+
+
 class AdComments(BaseModel):
     value: str
     ad_id: int
