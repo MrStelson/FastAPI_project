@@ -36,6 +36,7 @@
   "user_id": 0
 }
 ```
+* #### Update ad (PUT) 
 * #### Delete ad (DELETE) **only for owner and admin** params={ad_id}:  http://localhost:8000/api/v1/ad/delete/{ad_id}/
 * #### Get all comments (GET) params={ad_id}:  http://localhost:8000/api/v1/ad/{ad_id}/comments/
 * #### Add comment (POST) **only for auth user** params={ad_id}:  http://localhost:8000/api/v1/ad/{ad_id}/comments/
@@ -47,7 +48,7 @@
 
 ### Login with JWT
 
-* #### For Sign up (POST): http://localhost:8000/api/v1/auth/register/. Response body:
+* #### Sign up (POST): http://localhost:8000/api/v1/auth/register/. Response body:
 ```
 {
   "email": "email@email.com",
@@ -61,14 +62,18 @@
 }
 ```
 
-* #### For Login (POST): http://localhost:8000/api/v1/auth/jwt/login/. Response body:
+* #### Login (POST): http://localhost:8000/api/v1/auth/jwt/login/. Response body:
 ```
 {
   "username": "email@email.com",
   "password": "password",
 }
 ```
-* #### For logout (POST): http://localhost:8000/api/v1/auth/jwt/logout/
+* #### Logout (POST): http://localhost:8000/api/v1/auth/jwt/logout/
+
+* #### Banned user **only for admin** (POST) params={user_id}: http://localhost:8000/api/v1/auth/banned/{user_id}}/
+* #### Make admin user **only for admin** (POST) params={user_id}: http://localhost:8000/api/v1/auth/make_admin/{user_id}}/
+
 ---
 
 ## * Also You can see in swagger UI (/docs)
@@ -111,3 +116,5 @@ uviron src.main:app --reload for debug
 > - API_URL=api/v1
 > - SECRET_AUTH=e9d362834b9adc2fcfd46eea736017fa0cdf515d90as6ed9cdb9sde3d411ce21
 ---
+
+### Use test_data.txt for testing app

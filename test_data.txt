@@ -1,5 +1,29 @@
-insert into app_role (id, name)
-values (1, 'user'), (2, 'moderator'), (3, 'admin');
+Use default SECRET_KEY for this query
+
+
+Test Users:
+admin@mail.com
+admin
+
+moderator@mail.com
+moderator
+
+test_1@mail.com
+test
+
+test_2@mail.com
+test
+
+test_3@mail.com
+test
+
+
+
+
+SQL:
+
+insert into app_role (name)
+values ('user'), ('moderator'), ('admin');
 
 insert into app_user (email, username, role_id, hashed_password, is_active, is_superuser, is_verified, is_banned)
 values ('admin@mail.com', 'Admin', '3', '$2b$12$hRobDSXAV/ssXOvLXu5I9eceU8or1cp.n4/mIma7DnUAf1aj8WRrS', True, False, False, False);
@@ -13,11 +37,11 @@ values ('test_1@mail.com', 'User_1', '1', '$2b$12$hf/BDEBRCBgPvdALs9wbXeUgpngrSr
 ('test_3@mail.com', 'User_3', '1', '$2b$12$fRnn2.XyoX5GF3nsnk3aPO3bhuriU8I1TGc9dq.ZcjhmY.gr7P5uy', True, False, False, False);
 
 
-insert into ad_type (id, type_name)
-values (1, 'Работа'), (2, 'Услуги'), (3, 'Одежда'), (4, 'Красота'), (5, 'Запчасти');
+insert into ad_type (type_name)
+values ('Работа'), ('Услуги'), ('Одежда'), ('Красота'), ('Запчасти');
 
-insert into ad_category (id, category_name, type_id)
-values (1, 'Ищу работу', 1), (2, 'Ищу сотрудника', 1), (3, 'Транспорт и перевозки', 2), (4, 'Ремнот и отделка', 2), (5, 'Строительство', 2), (6, 'Обучение и курсы', 2), (7, 'Для мужчин', 3), (8, 'Для женщин', 3), (9, 'Для детей', 3), (10, 'Маникюр, педикюр', 4), (11, 'Услуги парикмахера', 4), (12, 'Ресницы, брови', 4), (13, 'Шины, диски', 5), (14, 'Тормозная система', 5), (15, 'Трансмиссия', 5);
+insert into ad_category (category_name, type_id)
+values ('Ищу работу', 1), ('Ищу сотрудника', 1), ('Транспорт и перевозки', 2), ('Ремнот и отделка', 2), ('Строительство', 2), ('Обучение и курсы', 2), ('Для мужчин', 3), ('Для женщин', 3), ('Для детей', 3), ('Маникюр, педикюр', 4), ('Услуги парикмахера', 4), ('Ресницы, брови', 4), ('Шины, диски', 5), ('Тормозная система', 5), ('Трансмиссия', 5);
 
-insert into ad (id, name, description, price, user_id, category_id)
-values (1, 'Вакансия: Python Developer', 'Мощное описание', '200', 1, 1), (2, 'Вакансия: Go Developer', 'Мощное описание', '200', 3, 1), (3, 'Вакансия: Go Developer', 'Мощное описание', '200', 3, 1), (4, 'Вакансия: Go Developer', 'Мощное описание', '200', 3, 1), (5, 'Вакансия: Go Developer', 'Мощное описание', '200', 3, 1), (6, 'Вакансия: Go Developer', 'Мощное описание', '200', 3, 1), (7, 'Вакансия: Go Developer', 'Мощное описание', '200', 3, 1), (8, 'Вакансия: Go Developer', 'Мощное описание', '200', 3, 1);
+insert into ad (name, description, price, user_id, category_id)
+values ('Вакансия: Python Developer', 'Мощное описание', '200', 1, 1), ('Вакансия: Go Developer', 'Мощное описание', '200', 3, 1), ('Вакансия: Go Developer', 'Мощное описание', '200', 3, 1), ('Вакансия: Go Developer', 'Мощное описание', '200', 3, 1), ('Вакансия: Go Developer', 'Мощное описание', '200', 3, 1), ('Вакансия: Go Developer', 'Мощное описание', '200', 3, 1), ('Вакансия: Go Developer', 'Мощное описание', '200', 3, 1), ('Вакансия: Go Developer', 'Мощное описание', '200', 3, 1);

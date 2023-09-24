@@ -141,7 +141,6 @@ async def add_ad_get(request: Request,
 @router.post("/add")
 async def add_ad_post(request: Request,
                       title: str = Form(...),
-                      type_name: str = Form(...),
                       category_name: str = Form(...),
                       price: str = Form(...),
                       description: str = Form(...),
