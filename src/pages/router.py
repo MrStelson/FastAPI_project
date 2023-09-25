@@ -1,7 +1,5 @@
-from datetime import datetime
-
-import httpx
-from fastapi import APIRouter, Request, Depends, Form, HTTPException
+import aiohttp
+from fastapi import APIRouter, Request, Depends, Form
 from fastapi.templating import Jinja2Templates
 from fastapi.responses import RedirectResponse
 from fastapi_users.exceptions import UserAlreadyExists
@@ -9,14 +7,14 @@ import starlette.status as status
 
 from src.ad.router import get_type, get_ad, get_ad_by_type, get_category, get_type_id, get_ad_by_id_user, delete_ad, \
     get_ad_by_id, get_ad_comments
-from src.ad.schemas import AdCreate
-from src.ad.service import get_category_by_name, add_new_ad
+
+from src.ad.service import get_category_by_name
 from src.auth.config import current_user
 from src.auth.manager import get_user_manager, UserManager
 from src.auth.models import User
 from src.auth.schemas import UserCreate
 from src.auth.service import get_all_users, banned_users, add_admin
-from src.config import API_URL
+from src.config import API_URL, HOST_PORT
 
 router = APIRouter(
     prefix="",
@@ -25,20 +23,33 @@ router = APIRouter(
 
 templates = Jinja2Templates(directory="src/templates")
 
+HOME_URL = f'http://localhost:{HOST_PORT}'
+
+
+async def http_response_post(url, json_data=None, data_data=None, cookies=None):
+    async with aiohttp.ClientSession(trust_env=True) as session:
+        response = await session.post(url=url,
+                                      json=json_data,
+                                      data=data_data,
+                                      cookies=cookies,
+                                      )
+        return response
+
 
 @router.get("/")
 async def get_base_page(request: Request, types=Depends(get_type),
-                        user=Depends(current_user), ads=Depends(get_ad), ):
-    return templates.TemplateResponse("index.html", {"request": request,
-                                                     "types": types["data"],
-                                                     "user": user,
-                                                     "ads": ads["data"],
-                                                     })
+                        user=Depends(current_user),
+                        ads=Depends(get_ad),
+                        ):
+    data = {"request": request, "types": types["data"], "user": user, "ads": ads["data"]}
+    return templates.TemplateResponse("index.html", data)
 
 
 @router.get('/ad/{ad_id}')
-async def get_ad_by_id(request: Request, types=Depends(get_type),
-                       user=Depends(current_user), ad=Depends(get_ad_by_id),
+async def get_ad_by_id(request: Request,
+                       types=Depends(get_type),
+                       user=Depends(current_user),
+                       ad=Depends(get_ad_by_id),
                        comments=Depends(get_ad_comments)):
     return templates.TemplateResponse("ad_page.html", {"request": request,
                                                        "types": types["data"],
@@ -60,16 +71,8 @@ async def login_post(request: Request,
                      email: str = Form(...),
                      password: str = Form(...)):
     data = {"username": email, "password": password}
-    url = f'{request.base_url}{API_URL}/auth/jwt/login'
-    async with httpx.AsyncClient() as client:
-        response = await client.post(
-            url=url,
-            headers={
-                'accept': 'application/json',
-                'Content-Type': 'application/x-www-form-urlencoded',
-            },
-            data=data,
-        )
+    url = f'{HOME_URL}/{API_URL}/auth/jwt/login'
+    response = await http_response_post(url=url, data_data=data)
     redirect = RedirectResponse(url=f'{request.base_url}', status_code=status.HTTP_302_FOUND)
     redirect.set_cookie(key='advertisement_auth', value=response.cookies.get('advertisement_auth'))
     return redirect
@@ -147,22 +150,22 @@ async def add_ad_post(request: Request,
                       user=Depends(current_user),
                       ):
     redirect = RedirectResponse(url=f'{request.base_url}', status_code=status.HTTP_302_FOUND)
+
     if user is None:
         return redirect
     if user.is_banned:
         return redirect
+
     category_id = await get_category_by_name(category_name)
     data = {"name": title,
             "category_id": category_id,
             "description": description,
             "price": price,
-            "created_at": datetime.utcnow(),
-            "updated_at": datetime.utcnow(),
             "user_id": user.id,
             }
-    new_ad = AdCreate(**data)
-    await add_new_ad(new_ad)
-    redirect = RedirectResponse(url=f'{request.base_url}', status_code=status.HTTP_302_FOUND)
+    url = f'{HOME_URL}/{API_URL}/ad/'
+    cookie = {'advertisement_auth': request.cookies.get('advertisement_auth')}
+    await http_response_post(url=url, json_data=data, cookies=cookie)
     return redirect
 
 

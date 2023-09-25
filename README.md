@@ -18,7 +18,7 @@ python -m venv venv
 venv\Scripts\activate
 ```
 ```
-pip install -r requrements.txt
+pip install -r requirements.txt
 ```
 ```
 alembic revision --autogenerate -m "Name of migration"
@@ -27,8 +27,9 @@ alembic revision --autogenerate -m "Name of migration"
 alembic upgrade head
 ```
 ```
-uviron src.main:app --reload for debug
+uvicorn src.main:app --reload
 ```
+#### localhost port: 8000
 ---
 ### Start project with docker
 ```
