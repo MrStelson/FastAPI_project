@@ -13,3 +13,5 @@ DB_PASS = os.environ.get("DB_PASS")
 SECRET_AUTH = os.environ.get("SECRET_AUTH")
 
 API_URL = os.environ.get("API_URL")
+
+HOST_PORT = os.environ.get('HOST_PORT')
