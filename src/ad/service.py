@@ -6,7 +6,7 @@ from src.database import async_session_maker
 async def get_result_list(query,
                           session,
                           page: int = 0,
-                          size: int = 5,
+                          size: int = 10,
                           ):
     # print(query)
     offset_min = page * size
@@ -39,6 +39,12 @@ async def get_type_by_name(type_name):
         result_list = await get_result_list(query=query, session=session)
         type_id = result_list[0]
         return type_id["id"]
+
+
+async def get_type_by_slug(type_slug, session):
+    query = select(AdType).where(AdType.slug == type_slug)
+    result_list = await get_result_list(query=query, session=session)
+    return result_list
 
 
 async def add_type_ad(new_type_name, session):
@@ -103,6 +109,16 @@ async def get_by_type(type_id,
                       size: int,
                       ):
     query = select(Ad).join(AdCategory).join(AdType).where(AdType.id == type_id)
+    result_list = await get_result_list(query=query, session=session, page=page, size=size)
+    return result_list
+
+
+async def get_by_type_slug(type_slug,
+                           session,
+                           page: int,
+                           size: int,
+                           ):
+    query = select(Ad).join(AdCategory).join(AdType).where(AdType.slug == type_slug)
     result_list = await get_result_list(query=query, session=session, page=page, size=size)
     return result_list
 

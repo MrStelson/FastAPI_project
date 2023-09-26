@@ -4,6 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from src.ad.router import router as router_announcement
 from src.auth.router import router as router_auth
 from src.pages.router import router as router_pages
+from src.chat.router import router as router_chat
 from fastapi.staticfiles import StaticFiles
 
 app = FastAPI(
@@ -14,6 +15,7 @@ app.mount("/static", StaticFiles(directory="src/static"), name="static")
 app.include_router(router_announcement)
 app.include_router(router_auth)
 app.include_router(router_pages)
+app.include_router(router_chat)
 
 origins = [
     "http://localhost:8000",

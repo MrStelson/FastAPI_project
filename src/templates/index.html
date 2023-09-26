@@ -5,32 +5,16 @@ Advertisement
 {% endblock %}
 
 {% block type_name %}
-{% if type_name %}
-    <h1>{{ type_name }}</h1>
-{% else %}
-    <h1>Все категории</h1>
-{% endif %}
-{% endblock %}
-
-{% block usersetting %}
-
-    {% if user.role_id == 3 %}
-        <a href="/editUsers">Редактировать пользователей</a>
-    {% endif %}
-
-    {% if user is none %}
-        <a href="/login">Вход и регистрация</a>
+    {% if type_name %}
+        <h1>{{ type_name }}</h1>
     {% else %}
-        <a href="/add">Добавить объявление</a>
-        <a href="/user/{{ user.id }}" class="username">{{ user.username }}</a>
-        <a href="/logout">Выйти</a>
+        <h1>Все категории</h1>
     {% endif %}
-
 {% endblock %}
 
 {% block category %}
     {% for type in types %}
-        <a href="/type/{{ type.id }}">
+        <a href="/type/{{ type.slug }}">
             <li>{{ type.type_name }}</li>
         </a>
     {% endfor %}

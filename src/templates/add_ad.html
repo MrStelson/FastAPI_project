@@ -2,22 +2,6 @@
 
 {% block title %}Add new Advertisement{% endblock %}
 
-{% block usersetting %}
-
-    {% if user.role_id == 3 %}
-        <a href="/editUsers">Редактировать пользователей</a>
-    {% endif %}
-
-    {% if user is none %}
-        <a href="/login">Вход и регистрация</a>
-    {% else %}
-        <a href="/add">Добавить объявление</a>
-        <a href="/user/{{ user.id }}" class="username">{{ user.username }}</a>
-        <a href="/logout">Выйти</a>
-    {% endif %}
-
-{% endblock %}
-
 {% block category %}
     {% for type in types %}
         <a href="/type/{{ type.id }}">

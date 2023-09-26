@@ -5,8 +5,8 @@ from fastapi.responses import RedirectResponse
 from fastapi_users.exceptions import UserAlreadyExists
 import starlette.status as status
 
-from src.ad.router import get_type, get_ad, get_ad_by_type, get_category, get_type_id, get_ad_by_id_user, delete_ad, \
-    get_ad_by_id, get_ad_comments
+from src.ad.router import get_type, get_ad, get_ad_by_type, get_category, get_ad_by_id_user, delete_ad, \
+    get_ad_by_id, get_ad_comments, get_type_slug
 
 from src.ad.service import get_category_by_name
 from src.auth.config import current_user
@@ -62,8 +62,9 @@ async def get_ad_by_id(request: Request,
 
 
 @router.get("/login")
-async def login_get(request: Request):
-    return templates.TemplateResponse("login.html", {"request": request})
+async def login_get(request: Request,
+                    user=Depends(current_user)):
+    return templates.TemplateResponse("login.html", {"request": request, "user": user})
 
 
 @router.post("/login")
@@ -74,7 +75,7 @@ async def login_post(request: Request,
     url = f'{HOME_URL}/{API_URL}/auth/jwt/login'
     response = await http_response_post(url=url, data_data=data)
     redirect = RedirectResponse(url=f'{request.base_url}', status_code=status.HTTP_302_FOUND)
-    redirect.set_cookie(key='advertisement_auth', value=response.cookies.get('advertisement_auth'))
+    redirect.set_cookie(key='advertisement_auth', value=response.cookies.get('advertisement_auth').value)
     return redirect
 
 
@@ -86,13 +87,15 @@ async def logout(request: Request):
 
 
 @router.get("/registry")
-async def registry_get(request: Request):
-    return templates.TemplateResponse("registry.html", {"request": request})
+async def registry_get(request: Request,
+                       user=Depends(current_user)):
+    return templates.TemplateResponse("registry.html", {"request": request, "user": user})
 
 
 @router.post("/registry")
 async def registry_post(request: Request,
                         user_manager: UserManager = Depends(get_user_manager),
+                        user=Depends(current_user),
                         email: str = Form(...),
                         username: str = Form(...),
                         password: str = Form(...),
@@ -110,16 +113,16 @@ async def registry_post(request: Request,
         await user_manager.create(user_create=UserCreate(**data))
     except UserAlreadyExists:
         errors.append(f'User with {email} already exists')
-        return templates.TemplateResponse("registry.html", {"request": request, "errors": errors})
+        return templates.TemplateResponse("registry.html", {"request": request, "errors": errors, "user": user})
     redirect = RedirectResponse(url='/login')
     return redirect
 
 
-@router.get("/type/{type_id}")
+@router.get("/type/{type_slug}")
 async def get_base_page_type(request: Request,
                              types=Depends(get_type),
                              user=Depends(current_user),
-                             type_name=Depends(get_type_id),
+                             type_name=Depends(get_type_slug),
                              ads=Depends(get_ad_by_type)):
     return templates.TemplateResponse("index.html", {"request": request,
                                                      "types": types["data"],
@@ -253,3 +256,10 @@ async def delete_ad(request: Request,
                     deleted_ad=Depends(delete_ad)):
     redirect = RedirectResponse(url=f'/', status_code=status.HTTP_302_FOUND)
     return redirect
+
+
+@router.get('/chat')
+async def get_chat_page(request: Request,
+                        user=Depends(current_user)):
+    return templates.TemplateResponse('chat.html', {"request": request,
+                                                    "user": user})
