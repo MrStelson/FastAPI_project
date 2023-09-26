@@ -54,6 +54,25 @@ async def get_type_id(type_id: int,
         }
 
 
+@router.get('/types/{type_slug}')
+async def get_type_slug(type_slug: str,
+                        session: AsyncSession = Depends(get_async_session)
+                        ):
+    try:
+        result = await get_type_by_slug(type_slug=type_slug, session=session)
+        return {
+            "status": 200,
+            "data": result,
+            "detail": None,
+        }
+    except Exception:
+        return {
+            "status": 500,
+            "data": f"Internal Server Error",
+            "detail": None,
+        }
+
+
 @router.post('/type')
 async def add_type(new_type_name: str,
                    session: AsyncSession = Depends(get_async_session),
@@ -141,7 +160,7 @@ async def add_category(new_category_name: str,
 @router.get('/')
 async def get_ad(session: AsyncSession = Depends(get_async_session),
                  page: int = 0,
-                 size: int = 5,
+                 size: int = 10,
                  ):
     try:
         result = await get_all_ad(session=session, page=page, size=size)
@@ -218,6 +237,27 @@ async def get_ad_by_type(type_id: int,
                          ):
     try:
         result = await get_by_type(type_id=type_id, session=session, page=page, size=size)
+        return {
+            "status": 200,
+            "data": result,
+            "detail": None,
+        }
+    except Exception:
+        return {
+            "status": 500,
+            "data": f"Internal Server Error",
+            "detail": None,
+        }
+
+
+@router.get('/type/{type_slug}')
+async def get_ad_by_type(type_slug: str,
+                         session: AsyncSession = Depends(get_async_session),
+                         page: int = 0,
+                         size: int = 5,
+                         ):
+    try:
+        result = await get_by_type_slug(type_slug=type_slug, session=session, page=page, size=size)
         return {
             "status": 200,
             "data": result,

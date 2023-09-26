@@ -5,35 +5,35 @@ Advertisement
 {% endblock %}
 
 {% block type_name %}
-{% if type_name %}
-<h1>{{ type_name }}</h1>
-{% else %}
-<h1>Все категории</h1>
-{% endif %}
+    {% if type_name %}
+        <h1>{{ type_name }}</h1>
+    {% else %}
+        <h1>Все категории</h1>
+    {% endif %}
 {% endblock %}
 
 {% block usersetting %}
 
 {% if user.role_id == 3 %}
-<a href="/editUsers">Редактировать пользователей</a>
+    <a href="/editUsers">Редактировать пользователей</a>
 {% endif %}
 
 {% if user is none %}
-<a href="/login">Вход и регистрация</a>
+    <a href="/login">Вход и регистрация</a>
 {% else %}
-<a href="/add">Добавить объявление</a>
-<a href="/user/{{ user.id }}" class="username">{{ user.username }}</a>
-<a href="/logout">Выйти</a>
+    <a href="/add">Добавить объявление</a>
+    <a href="/user/{{ user.id }}" class="username">{{ user.username }}</a>
+    <a href="/logout">Выйти</a>
 {% endif %}
 
 {% endblock %}
 
 {% block category %}
-{% for type in types %}
-<a href="/type/{{ type.id }}">
-    <li>{{ type.type_name }}</li>
-</a>
-{% endfor %}
+    {% for type in types %}
+        <a href="/type/{{ type.id }}">
+            <li>{{ type.type_name }}</li>
+        </a>
+    {% endfor %}
 {% endblock %}
 
 {% block content %}
@@ -66,22 +66,22 @@ Advertisement
 
 
     {% if user is not none %}
-    <div class="item-btn">
-        <a href="/ad/{{ ad.id }}" role="button">Оставить комментарий</a>
-    </div>
+        <div class="item-btn">
+            <a href="/ad/{{ ad.id }}" role="button">Оставить комментарий</a>
+        </div>
     {% endif %}
     <div class="comments">
         Комментарии:
         {% for comment in comments %}
-        <div class="comment">
-            {{ comment.value }}
-        </div>
+            <div class="comment">
+                {{ comment.value }}
+            </div>
 
-        {% if user.role_id == 3 %}
-        <div class="item-btn">
-            <a href="/comment/delete/{{ comment.id }}">Удалить</a>
-        </div>
-        {% endif %}
+            {% if user.role_id == 3 %}
+                <div class="item-btn">
+                    <a href="/comment/delete/{{ comment.id }}">Удалить</a>
+                </div>
+            {% endif %}
         {% endfor %}
     </div>
 </div>

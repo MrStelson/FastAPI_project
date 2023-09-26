@@ -3,11 +3,13 @@ services:
   db:
     image: postgres:15
     container_name: fastapi_project_db
-    command: -p 5430
+    command: ['-p 5430']
     expose:
       - 5430
     env_file:
       - .env-non-dev
+    volumes:
+      - ./docker/init.sql:/docker-entrypoint-initdb.d/init.sql
 
   app:
     build:

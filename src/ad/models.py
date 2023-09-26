@@ -13,6 +13,7 @@ class AdType(Base):
     __tablename__ = "ad_type"
     id = Column(Integer, primary_key=True, autoincrement=True)
     type_name = Column(String, nullable=False, unique=True)
+    slug = Column(String, nullable=False, unique=True)
     categories = relationship(
         'AdCategory',
         back_populates='type_name'
@@ -23,6 +24,7 @@ class AdCategory(Base):
     __tablename__ = "ad_category"
     id = Column(Integer, primary_key=True, autoincrement=True)
     category_name = Column(String, nullable=False, unique=True)
+    slug = Column(String, nullable=False, unique=True)
     type_id = Column(Integer, ForeignKey('ad_type.id'))
     type_name = relationship(
         'AdType',
