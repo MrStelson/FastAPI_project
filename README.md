@@ -29,7 +29,9 @@ alembic upgrade head
 ```
 uvicorn src.main:app --reload
 ```
-#### localhost port: 8000
+
+### localhost port: 8000
+
 ---
 ### Start project with docker
 ```
@@ -43,7 +45,7 @@ docker compose up
 > email: admin@mail.com <br>
 > password: admin
 
-#### localhost port: 8888
+### localhost port: 8888
 
 ---
 ### Before start project necessary create virtualenv ".env" with your data of db and secret key
