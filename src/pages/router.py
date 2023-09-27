@@ -74,8 +74,9 @@ async def login_post(request: Request,
     data = {"username": email, "password": password}
     url = f'{HOME_URL}/{API_URL}/auth/jwt/login'
     response = await http_response_post(url=url, data_data=data)
+    cookie_value = response.cookies.get('advertisement_auth').value
     redirect = RedirectResponse(url=f'{request.base_url}', status_code=status.HTTP_302_FOUND)
-    redirect.set_cookie(key='advertisement_auth', value=response.cookies.get('advertisement_auth').value)
+    redirect.set_cookie(key='advertisement_auth', value=cookie_value)
     return redirect
 
 

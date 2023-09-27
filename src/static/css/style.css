@@ -340,3 +340,12 @@ td{
 .chatContainer{
     width: 100%;
 }
+
+.messageBlock{
+    border: 1px solid #000;
+    width: 100%;
+    height: 250px;
+    overflow-y: auto; /* прокрутка по вертикали */
+    padding: 0px;
+    margin-top: 20px;
+}
