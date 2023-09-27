@@ -17,10 +17,12 @@
         {% else %}
            <h2>Please auth</h2>
         {% endif %}
-
-        <ul id='messages'>
-
-        </ul>
+        
+        <div class="messageBlock">
+            <ul id='messages'>
+                
+            </ul>
+        </div>
         <script>
 
             if ({{ user.id }}) {
@@ -32,7 +34,7 @@
                     let message = document.createElement('li')
                     let content = document.createTextNode(event.data)
                     message.appendChild(content)
-                    messages.appendChild(message)
+                    messages.prepend(message)
                 };
                 function sendMessage(event) {
                     let input = document.getElementById("messageText")
